@@ -1,0 +1,37 @@
+{"properties": [
+  {
+    "name": "spring.app.jwtSecret",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.app.jwtSecret'"
+  },
+  {
+    "name": "spring.app.jwtExpirationMs",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.app.jwtExpirationMs'"
+  },
+  {
+    "name": "project.image",
+    "type": "java.lang.String",
+    "description": "A description for 'project.image'"
+  },
+  {
+    "name": "spring.ecomm.app.jwtCookieName",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.ecomm.app.jwtCookieName'"
+  },
+  {
+    "name": "spring.ecom.app.jwtCookieName",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.ecom.app.jwtCookieName'"
+  },
+  {
+    "name": "frontend.url",
+    "type": "java.lang.String",
+    "description": "A description for 'frontend.url'"
+  },
+  {
+    "name": "image.base.url",
+    "type": "java.lang.String",
+    "description": "A description for 'image.base.url'"
+  }
+]}
