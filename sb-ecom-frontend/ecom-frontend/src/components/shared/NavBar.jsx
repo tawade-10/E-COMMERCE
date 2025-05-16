@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'; // Import useSelector hook
 const NavBar = () => {
   const path = useLocation().pathname;
   const [navbarOpen, setNavBarOpen] = useState(false);
-  // const cartItems = useSelector((state) => state.cart.items); // Get cart items from Redux store
+  const {cart} = useSelector((state) => state.carts); 
   // const cartCount = cartItems.reduce((count, item) => count + item.quantity, 0); // Calculate total quantity
 
   return (

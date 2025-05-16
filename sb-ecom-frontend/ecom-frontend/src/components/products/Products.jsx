@@ -6,23 +6,10 @@ import Pagination from "../shared/Pagination";
 import ProductCard from "../shared/ProductCard";
 import { fetchCategories } from "../store/actions";
 import Filter from "./Filter";
-<<<<<<< HEAD:sb-ecom-frontend/ecom-frontend/src/components/products/Products.jsx
-
-const Products = () => {
-  const { isLoading, errorMessage } = useSelector((state) => state.errors);
-  const { products, categories, pagination } = useSelector(
-    (state) => state.products
-  );
-=======
-import ProductCard from "./ProductCard";
-import { fetchCategories } from "./store/actions";
-import useProductFilter from "./useProductFilter";
-import Pagination from "./Pagination";
 
 const Products = () => {
   const { isLoading, errorMessage } = useSelector((state) => state.errors);
   const { products, categories, pagination } = useSelector((state) => state.products);
->>>>>>> c0fffb0e25311683ddf29b2a5c0281ecb3fc76aa:sb-ecom-frontend/ecom-frontend/src/components/Products.jsx
   const dispatch = useDispatch();
   useProductFilter();
 
