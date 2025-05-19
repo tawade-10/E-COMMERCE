@@ -165,5 +165,51 @@ export const registerNewUser =
 export const logoutUser = (navigate) => (dispatch) => {
   dispatch({ type: "LOG_OUT" });
   localStorage.removeItem("auth");
-  navigate("login");
+  navigate("/login");
+};
+
+export const addUpdateUserAddress =
+  (sendData, toast, AddressId, setOpenAddressModal) =>
+  async (dispatch, getState) => {
+    //const { user } = getState().auth;
+    dispatch({ type: "BUTTON_LOADER" });
+    try {
+      const { data } = await api.post("/addresses", sendData);
+      toast.success(data?.message || "Address Saved Successfully!");
+      dispatch({ type: "IS_SUCCESS" });
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error?.response?.data?.message ||
+          error?.response?.data?.message ||
+          "Internal Server Error"
+      );
+      dispatch({ type: "IS_ERROR", payload: null });
+    } finally {
+      setOpenAddressModal(false);
+    }
+  };
+
+export const getUserAddresses = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: "IS_FETCHING" });
+    const { data } = await api.get(`/addresses`);
+    dispatch({
+      type: "USER_ADDRESS",
+      payload: data,
+      // pageNumber: data.pageNumber,
+      // pageSize: data.pageSize,
+      // totalElements: data.totalElements,
+      // totalPages: data.totalPages,
+      // lastPage: data.lastPage,
+    });
+    dispatch({ type: "IS_SUCCESS" });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: "IS_ERROR",
+      payload:
+        error?.response?.data?.message || "Failed to Fetch User addresses",
+    });
+  }
 };
