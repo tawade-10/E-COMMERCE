@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaAddressCard } from "react-icons/fa";
@@ -14,6 +14,7 @@ const AddAddressForm = ({ address, setOpenAddressModal }) => {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     mode: "onTouched",
@@ -25,13 +26,25 @@ const AddAddressForm = ({ address, setOpenAddressModal }) => {
     );
   };
 
+  //For Updating Address
+  useEffect(() => {
+    if (address?.addressId) {
+      setValue("buildingName", address?.buildingName);
+      setValue("city", address?.city);
+      setValue("state", address?.state);
+      setValue("pincode", address?.pincode);
+      setValue("street", address?.street);
+      setValue("country", address?.country);
+    }
+  }, [address]);
+
   return (
     <React.Fragment>
       <div className="">
         <form onSubmit={handleSubmit(onSaveAddressHandler)} className="">
           <div className="flex justify-center mb-4 font-semibold text-2xl text-slate-800 py-2 px-4">
             <FaAddressCard size={35} className="text-slate-800 text-5xl mr-2" />
-            Add Address
+            {!address?.addressId ? "Add Address" : "Update Address"}
           </div>
           <hr className="mt-2 mb-5 text-black" />
           <div className="flex flex-col gap-3">
@@ -44,7 +57,7 @@ const AddAddressForm = ({ address, setOpenAddressModal }) => {
               placeholder="Enter your Building Name"
               register={register}
               errors={errors}
-              min={5} // Align with backend DTO
+              min={5}
             />
 
             <InputField
@@ -56,7 +69,7 @@ const AddAddressForm = ({ address, setOpenAddressModal }) => {
               placeholder="Enter your City"
               register={register}
               errors={errors}
-              min={5} // Align with backend DTO
+              min={5}
             />
 
             <InputField
@@ -68,7 +81,7 @@ const AddAddressForm = ({ address, setOpenAddressModal }) => {
               placeholder="Enter your State"
               register={register}
               errors={errors}
-              min={2} // Align with backend DTO
+              min={2}
             />
 
             <InputField
@@ -80,7 +93,7 @@ const AddAddressForm = ({ address, setOpenAddressModal }) => {
               placeholder="Enter your Pincode"
               register={register}
               errors={errors}
-              min={6} // Align with backend DTO
+              min={6}
             />
 
             <InputField
@@ -92,7 +105,7 @@ const AddAddressForm = ({ address, setOpenAddressModal }) => {
               placeholder="Enter your Street"
               register={register}
               errors={errors}
-              min={5} // Align with backend DTO
+              min={5}
             />
 
             <InputField
@@ -104,7 +117,7 @@ const AddAddressForm = ({ address, setOpenAddressModal }) => {
               placeholder="Enter your Country"
               register={register}
               errors={errors}
-              min={2} // Align with backend DTO
+              min={2}
             />
           </div>
 

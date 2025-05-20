@@ -4,14 +4,12 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const PrivateRoute = ({ publicPage = false }) => {
   const { user } = useSelector((state) => state.auth);
+
   if (publicPage) {
-    return user ? <Navigate to="/" /> : <Outlet />;
+    return user ? <Navigate to="/" replace /> : <Outlet />;
   }
-  return (
-    <React.Fragment>
-      user ? <Outlet /> : <Navigate to="/login" />;
-    </React.Fragment>
-  );
+
+  return user ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;

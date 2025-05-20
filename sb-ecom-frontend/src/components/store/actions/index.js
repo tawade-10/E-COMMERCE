@@ -169,13 +169,18 @@ export const logoutUser = (navigate) => (dispatch) => {
 };
 
 export const addUpdateUserAddress =
-  (sendData, toast, AddressId, setOpenAddressModal) =>
+  (sendData, toast, addressId, setOpenAddressModal) =>
   async (dispatch, getState) => {
     //const { user } = getState().auth;
     dispatch({ type: "BUTTON_LOADER" });
     try {
-      const { data } = await api.post("/addresses", sendData);
-      toast.success(data?.message || "Address Saved Successfully!");
+      if (!addressId) {
+        const { data } = await api.post("/addresses", sendData);
+      } else {
+        await api.put(`/users/${addressId}`, sendData);
+      }
+      dispatch(getUserAddresses());
+      toast.success("Address Saved Successfully!");
       dispatch({ type: "IS_SUCCESS" });
     } catch (error) {
       console.log(error);
@@ -210,6 +215,75 @@ export const getUserAddresses = () => async (dispatch, getState) => {
       type: "IS_ERROR",
       payload:
         error?.response?.data?.message || "Failed to Fetch User addresses",
+    });
+  }
+};
+
+export const selectUserCheckoutAddress = (address) => {
+  return {
+    type: "SELECT_CHECKOUT_ADDRESS",
+    payload: address,
+  };
+};
+
+export const deleteUserAddress =
+  (toast, addressId, setOpenDeleteModal) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: "BUTTON_LOADER" });
+      const { data } = await api.delete(`/users/${addressId}`);
+      dispatch({ type: "IS_SUCCESS" });
+      dispatch(getUserAddresses());
+      dispatch(clearCheckoutAddress());
+      toast.success("Address Deleted Successfully");
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: "IS_ERROR",
+        payload: error?.response?.data?.message || "Error!",
+      });
+    } finally {
+      setOpenDeleteModal(false);
+    }
+  };
+
+export const addPaymentMethod = (method) => {
+  return {
+    type: "ADD_PAYMENT_METHOD",
+    payload: method,
+  };
+};
+
+export const createUserCart = (sendCartItems) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: "IS_FETCHING" });
+    await api.post(`/carts/create`, sendCartItems);
+    await dispatch(getUserCart());
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: "IS_ERROR",
+      payload: error?.response?.data?.message || "Error!",
+    });
+  }
+};
+
+export const getUserCart = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: "IS_FETCHING" });
+    const { data } = await api.get(`/carts/users/cart`);
+    dispatch({
+      type: "GET_USER_CART_PRODUCTS",
+      payload: data.products,
+      totalPrice: data.totalPrice,
+      cartId: data.cartId,
+    });
+    localStorage.setItem("cartItems", JSON.stringify(getState().carts.cart));
+    dispatch({ type: "IS_SUCCESS" });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: "IS_ERROR",
+      payload: error?.response?.data?.message || "Error!",
     });
   }
 };
