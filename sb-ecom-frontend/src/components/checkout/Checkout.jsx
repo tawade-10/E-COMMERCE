@@ -8,6 +8,8 @@ import { getUserAddresses } from "../store/actions";
 import AddressInfo from "./AddressInfo";
 import OrderSummary from "./OrderSummary";
 import PaymentMethod from "./PaymentMethod";
+import PayPalPayment from "./PayPalPayment";
+import StripePayment from "./StripePayment";
 
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -27,14 +29,14 @@ const Checkout = () => {
       toast.error("Please Select Checkout Address before Proceeding.");
       return;
     }
+    if (activeStep === 1 && !paymentMethod) {
+      toast.error("Please Select a Payment Method before Proceeding.");
+      return;
+    }
     setActiveStep((prevStep) => prevStep + 1);
   };
 
   const handleBack = () => {
-    if (activeStep === 1 && (!selectedUserCheckoutAddress || !paymentMethod)) {
-      toast.error("Please Select Payment Address before Proceeding.");
-      return;
-    }
     setActiveStep((prevStep) => prevStep - 1);
   };
 
@@ -69,6 +71,15 @@ const Checkout = () => {
                 paymentMethod={paymentMethod}
               />
             )}
+            {activeStep === 3 && (
+              <>
+                {paymentMethod === "Stripe" ? (
+                  <StripePayment />
+                ) : (
+                  <PayPalPayment />
+                )}
+              </>
+            )}
           </div>
         )}
         <div
@@ -87,24 +98,26 @@ const Checkout = () => {
               disabled={
                 isLoading ||
                 errorMessage ||
-                (activeStep === 0
-                  ? !selectedUserCheckoutAddress
-                  : activeStep === 1
-                  ? !paymentMethod
-                  : false)
+                (activeStep === 0 && !selectedUserCheckoutAddress) ||
+                (activeStep === 1 && !paymentMethod) // Ensure paymentMethod is selected for step 1
               }
               onClick={handleNext}
               className={`bg-blue-500 hover:bg-blue-700 text-white font-semibold px-6 h-10 rounded-md
-                         ${
-                           isLoading ||
-                           errorMessage ||
-                           (activeStep === 0 && !selectedUserCheckoutAddress) ||
-                           (activeStep === 1 && !paymentMethod)
-                             ? "opacity-60 cursor-not-allowed" // Added cursor style
-                             : ""
-                         }`}
+                ${
+                  isLoading ||
+                  errorMessage ||
+                  (activeStep === 0 && !selectedUserCheckoutAddress) ||
+                  (activeStep === 1 && !paymentMethod)
+                    ? "opacity-60 cursor-not-allowed" // Added cursor style
+                    : ""
+                }`}
             >
               Proceed
+            </button>
+          )}
+          {activeStep === steps.length - 1 && (
+            <button className="bg-green-500 hover:bg-green-700 text-white font-semibold px-6 h-10 rounded-md">
+              Complete Payment
             </button>
           )}
         </div>
