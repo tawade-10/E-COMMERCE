@@ -220,6 +220,7 @@ export const getUserAddresses = () => async (dispatch, getState) => {
 };
 
 export const selectUserCheckoutAddress = (address) => {
+  localStorage.setItem("CHECKOUT_ADDRESS", JSON.stringify(address));
   return {
     type: "SELECT_CHECKOUT_ADDRESS",
     payload: address,
@@ -304,5 +305,25 @@ export const createStripePaymentSecret =
       toast.error(
         error?.response?.data?.message || "Filed to create Client Secret"
       );
+    }
+  };
+
+export const stripePaymentConfirmation =
+  (sendData, setErrorMessage, setLoading, toast) =>
+  async (dispatch, getState) => {
+    try {
+      const response = await api.post("/order/users/payments/CARD", sendData);
+
+      if (response.data) {
+        localStorage.removeItem("cartItems");
+        localStorage.removeItem("client-secret");
+        dispatch({ type: "REMOVE_CLIENT_SECRET_ADDRESS", payload: data });
+        dispatch({ type: "CLEAR_CART" });
+        toast.success("Order Accepted");
+      } else {
+        setErrorMessage("Payment Failed.Please Try again!");
+      }
+    } catch (error) {
+      setErrorMessage("Payment Failed.Please Try again!");
     }
   };

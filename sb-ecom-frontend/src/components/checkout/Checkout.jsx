@@ -46,7 +46,7 @@ const Checkout = () => {
 
   return (
     <React.Fragment>
-      <div className="py-14 min-h-[calc(100vh-100px)]">
+      <div className="py-14 min-h-[calc(100vh-100px)] pb-24">
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((label, index) => (
             <Step key={index}>
@@ -99,7 +99,7 @@ const Checkout = () => {
                 isLoading ||
                 errorMessage ||
                 (activeStep === 0 && !selectedUserCheckoutAddress) ||
-                (activeStep === 1 && !paymentMethod) // Ensure paymentMethod is selected for step 1
+                (activeStep === 1 && !paymentMethod)
               }
               onClick={handleNext}
               className={`bg-blue-500 hover:bg-blue-700 text-white font-semibold px-6 h-10 rounded-md
@@ -108,7 +108,7 @@ const Checkout = () => {
                   errorMessage ||
                   (activeStep === 0 && !selectedUserCheckoutAddress) ||
                   (activeStep === 1 && !paymentMethod)
-                    ? "opacity-60 cursor-not-allowed" // Added cursor style
+                    ? "opacity-60 cursor-not-allowed"
                     : ""
                 }`}
             >

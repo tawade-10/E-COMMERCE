@@ -7,6 +7,7 @@ import Login from "./components/auth/login";
 import Register from "./components/auth/Register";
 import Cart from "./components/cart/Cart";
 import Checkout from "./components/checkout/Checkout";
+import PaymentConfirmation from "./components/checkout/PaymentConfirmation";
 import Contact from "./components/Contact";
 import Home from "./components/home/Home";
 import PrivateRoute from "./components/PrivateRoute";
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/" element={<PrivateRoute />}>
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/order-confirm" element={<PaymentConfirmation />} />
           </Route>
           <Route path="/" element={<PrivateRoute publicPage />}>
             <Route path="/login" element={<Login />} />
